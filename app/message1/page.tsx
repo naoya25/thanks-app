@@ -9,6 +9,7 @@ const Message1Page: React.FC = () => {
   const handleClick = () => {
     const password = prompt("パスワードを入力してね:");
     const correctPassword = process.env.PASSWORD;
+    console.log(correctPassword);
 
     if (password === correctPassword) {
       setIsFavorited(true);
