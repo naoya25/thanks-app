@@ -9,7 +9,6 @@ const Message1Page: React.FC = () => {
   const handleClick = () => {
     const password = prompt("パスワードを入力してね:");
     const correctPassword = process.env.NEXT_PUBLIC_PASSWORD;
-    console.log(`password: ${correctPassword}`);
 
     if (password === correctPassword) {
       setIsFavorited(true);
