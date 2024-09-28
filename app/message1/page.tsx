@@ -6,9 +6,20 @@ import "./style.css";
 const Message1Page: React.FC = () => {
   const [isFavorited, setIsFavorited] = useState(false);
 
+  const handleClick = () => {
+    const password = prompt("パスワードを入力してね:");
+    const correctPassword = process.env.PASSWORD;
+
+    if (password === correctPassword) {
+      setIsFavorited(true);
+    } else {
+      alert("パスワードが違うよ");
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <div onClick={() => setIsFavorited(true)} className="cursor-pointer">
+      <div onClick={handleClick} className="cursor-pointer">
         {!isFavorited ? (
           <div className="flex flex-col items-center">
             <FavoriteIcon
