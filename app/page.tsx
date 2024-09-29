@@ -19,7 +19,7 @@ export default function Home() {
           <h2 className="text-xl font-semibold text-center text-blue-500 mb-6">
             使い方
           </h2>
-          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="max-w-5xl mx-auto grid grid-cols-1 gap-8">
             <Link href="/login">
               <div className="bg-white shadow-lg rounded-lg p-6 text-center">
                 <h3 className="text-xl font-semibold text-blue-500 mb-2">
@@ -42,7 +42,7 @@ export default function Home() {
             </Link>
             <div className="bg-white shadow-lg rounded-lg p-6 text-center">
               <h3 className="text-xl font-semibold text-blue-500 mb-2">
-                3. 送信URLを作成
+                3. URLを送信
               </h3>
               <p className="text-gray-600">手紙を書いたらURLを送ろう！</p>
             </div>
