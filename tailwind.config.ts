@@ -14,12 +14,13 @@ const config: Config = {
       },
       keyframes: {
         heartbeat: {
-          '0%, 100%': { transform: 'scale(1)' },
-          '50%': { transform: 'scale(1.2)' },
+          "0%, 100%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.2)" },
         },
       },
       animation: {
-        heartbeat: 'heartbeat 1s ease-in-out infinite',
+        heartbeat: "heartbeat 1s ease-in-out infinite",
+        "spin-linear": "spin 1s linear infinite",
       },
     },
   },

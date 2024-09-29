@@ -30,7 +30,7 @@ const Message1Page: React.FC = () => {
           <h1 className="text-4xl font-bold mt-4">Tap me!!</h1>
         </div>
       ) : (
-        <div className="letter">
+        <div className="letter p-6">
           <div className="typing">
             <div className="typing-effect">
               <span className="line">勇者へ</span>

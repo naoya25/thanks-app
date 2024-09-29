@@ -11,3 +11,13 @@ export const googleLogin = async () => {
     return;
   }
 };
+
+export const googleLogout = async () => {
+  const supabase = createClient();
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    console.error("Google logout error:", error.message);
+    return;
+  }
+};
