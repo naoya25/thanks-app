@@ -1,6 +1,5 @@
 "use client";
-import React, { ChangeEvent, useEffect, useState } from "react";
-import "./style.css";
+import React, { useEffect, useState } from "react";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { useUser } from "@/utils/hooks/useUser";
@@ -15,6 +14,7 @@ const WritePage: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const { user, loading: userLoading, error } = useUser();
+  const [displayContent, setDisplayContent] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -24,28 +24,13 @@ const WritePage: React.FC = () => {
         const letter = (await getLetterById(letterId)) as Letter;
         setTitle(letter.title);
         setMessage(letter.content);
+        setDisplayContent(letter.content);
         setPassword(letter.password);
       }
     };
 
     fetchLetter();
   }, [letterId]);
-
-  useEffect(() => {
-    function flexTextarea(el: HTMLElement) {
-      const dummy = el.querySelector(".FlexTextarea__dummy") as HTMLElement;
-      const textarea = el.querySelector(".FlexTextarea__textarea");
-      if (textarea) {
-        textarea.addEventListener("input", (e: Event) => {
-          const target = e.target as HTMLTextAreaElement;
-          dummy.textContent = target.value + "\u200b";
-        });
-      }
-    }
-    document
-      .querySelectorAll(".FlexTextarea")
-      .forEach((el) => flexTextarea(el as HTMLElement));
-  }, []);
 
   if (userLoading) {
     return <div>Loading...</div>;
@@ -58,6 +43,7 @@ const WritePage: React.FC = () => {
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
+    console.log(message);
     e.preventDefault();
     setLoading(true);
     if (
@@ -125,14 +111,26 @@ const WritePage: React.FC = () => {
             </div>
           )}
           <div className="letter p-6">
-            <div className="FlexTextarea">
-              <div className="FlexTextarea__dummy" aria-hidden="true"></div>
-              <textarea
-                id="FlexTextarea"
-                className="FlexTextarea__textarea"
-                onChange={(e) => setMessage(e.target.value)}
-                value={message}
-              />
+            <div
+              className="text"
+              style={{ outline: "none", border: "none" }}
+              contentEditable="true"
+              suppressContentEditableWarning={true}
+              onInput={(e) => {
+                const htmlContent = e.currentTarget.innerHTML;
+                if (htmlContent != null) {
+                  const updatedMessage = htmlContent
+                    .replace(/<br>/g, "\n")
+                    .replace(/<p>/g, "")
+                    .replace(/<\/p>/g, "\n");
+
+                  setMessage(updatedMessage);
+                }
+              }}
+            >
+              {displayContent.split("\n").map((line, index) => (
+                <p key={index}>{line}</p>
+              ))}
             </div>
           </div>
           <div className="flex justify-center">

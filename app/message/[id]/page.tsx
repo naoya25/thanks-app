@@ -10,6 +10,8 @@ const MessagePage: React.FC = () => {
   const letterId = useParams().id as string;
   const [letter, setLetter] = useState<Letter | null>(null);
   const [isFavorited, setIsFavorited] = useState(false);
+  const [displayContent, setDisplayContent] = useState("");
+  const [contentIndex, setContentIndex] = useState(0);
 
   useEffect(() => {
     const fetchLetter = async () => {
@@ -21,6 +23,16 @@ const MessagePage: React.FC = () => {
 
     fetchLetter();
   }, [letterId]);
+
+  useEffect(() => {
+    if (letter && contentIndex < letter.content.length) {
+      const intervalId = setInterval(() => {
+        setDisplayContent(letter.content.substring(0, contentIndex));
+        setContentIndex((prev) => prev + 1);
+      }, 100);
+      return () => clearInterval(intervalId);
+    }
+  }, [letter, contentIndex]);
 
   if (!letter) {
     return <div>Loading...</div>;
@@ -34,6 +46,8 @@ const MessagePage: React.FC = () => {
 
     if (isMatch) {
       setIsFavorited(true);
+      setDisplayContent("");
+      setContentIndex(0);
     } else {
       alert("パスワードが違うよ");
     }
@@ -54,14 +68,10 @@ const MessagePage: React.FC = () => {
         </div>
       ) : (
         <div className="letter p-6">
-          <div className="typing">
-            <div className="typing-effect">
-              {letter?.content.split("\n").map((line, index) => (
-                <span key={index} className="line">
-                  {line}
-                </span>
-              ))}
-            </div>
+          <div className="text">
+            {displayContent.split("\n").map((line, index) => (
+              <p key={index}>{line}</p>
+            ))}
           </div>
         </div>
       )}
