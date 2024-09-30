@@ -1,6 +1,7 @@
 import React from "react";
 import DisplayUserState from "./displayUserState";
 import Link from "next/link";
+import Image from "next/image";
 
 const Header: React.FC = () => {
   return (
@@ -8,7 +9,7 @@ const Header: React.FC = () => {
       <div className="max-w-7xl mx-auto p-4 flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <Link href="/">
-            <img
+            <Image
               className="h-12 w-12 rounded-full"
               src="https://via.placeholder.com/100"
               alt="Logo"

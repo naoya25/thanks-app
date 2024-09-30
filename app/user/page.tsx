@@ -9,14 +9,11 @@ import React from "react";
 import Link from "next/link";
 import { useLetters } from "@/utils/hooks/useLetters";
 import { dateFormat } from "@/utils/date";
+import Image from "next/image";
 
 const UserPage: React.FC = () => {
   const { user, loading, error } = useUser();
-  const {
-    letters,
-    loading: lettersLoading,
-    error: lettersError,
-  } = useLetters();
+  const { letters } = useLetters();
 
   if (loading) {
     return <div>Loading...</div>;
@@ -35,7 +32,7 @@ const UserPage: React.FC = () => {
         <div className="grid grid-cols-1 gap-6">
           <div className="bg-white shadow-lg rounded-lg p-6">
             <div className="flex items-center space-x-4">
-              <img
+              <Image
                 className="h-16 w-16 rounded-full object-cover"
                 src={user.user_metadata.avatar_url}
                 alt="User Avatar"
@@ -60,7 +57,7 @@ const UserPage: React.FC = () => {
             {letters.map((letter) => (
               <div className="flex justify-between items-center mt-6">
                 <Link href={`/write?letter_id=${letter.id}`}>
-                  <div className="flex space-x-4">
+                  <div key={letter.id} className="flex space-x-4">
                     <div className="bg-blue-500 h-10 w-10 rounded-full flex items-center justify-center text-white">
                       <EmailIcon />
                     </div>
