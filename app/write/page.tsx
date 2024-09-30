@@ -43,7 +43,6 @@ const WritePage: React.FC = () => {
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    console.log(message);
     e.preventDefault();
     setLoading(true);
     if (

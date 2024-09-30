@@ -40,8 +40,6 @@ const MessagePage: React.FC = () => {
 
   const handleClick = async () => {
     const inputPassword = prompt("パスワードを入力してね:") as string;
-    console.log(inputPassword);
-    console.log(letter?.password);
     const isMatch = await bcrypt.compare(inputPassword, letter?.password);
 
     if (isMatch) {

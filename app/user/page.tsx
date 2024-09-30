@@ -83,10 +83,7 @@ const UserPage: React.FC = () => {
                         alert("URLがクリップボードにコピーされました");
                       },
                       (err) => {
-                        console.error(
-                          "クリップボードへのコピーに失敗しました",
-                          err
-                        );
+                        alert("クリップボードへのコピーに失敗しました");
                       }
                     );
                   }}
