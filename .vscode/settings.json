@@ -1,5 +1,11 @@
 {
-  "cSpell.words": ["Favorited", "MINORI", "Supabase", "tailwindcss"],
+  "cSpell.words": [
+    "Favorited",
+    "googleusercontent",
+    "MINORI",
+    "Supabase",
+    "tailwindcss"
+  ],
   "editor.tabSize": 2,
   "[css]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

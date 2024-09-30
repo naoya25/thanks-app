@@ -9,13 +9,6 @@ const Header: React.FC = () => {
       <div className="max-w-7xl mx-auto p-4 flex justify-between items-center">
         <div className="flex items-center space-x-4">
           <Link href="/">
-            <Image
-              className="h-12 w-12 rounded-full"
-              src="https://via.placeholder.com/100"
-              alt="Logo"
-            />
-          </Link>
-          <Link href="/">
             <h1 className="text-white text-3xl font-bold tracking-wide">
               Thanks App
             </h1>

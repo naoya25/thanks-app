@@ -33,7 +33,9 @@ const UserPage: React.FC = () => {
           <div className="bg-white shadow-lg rounded-lg p-6">
             <div className="flex items-center space-x-4">
               <Image
-                className="h-16 w-16 rounded-full object-cover"
+                className="rounded-full object-cover"
+                width={64}
+                height={64}
                 src={user.user_metadata.avatar_url}
                 alt="User Avatar"
               />
