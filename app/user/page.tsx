@@ -55,7 +55,10 @@ const UserPage: React.FC = () => {
             </div>
             {/* ユーザの手紙一覧 */}
             {letters.map((letter) => (
-              <div className="flex justify-between items-center mt-6">
+              <div
+                key={letter.id}
+                className="flex justify-between items-center mt-6"
+              >
                 <Link href={`/write?letter_id=${letter.id}`}>
                   <div key={letter.id} className="flex space-x-4">
                     <div className="bg-blue-500 h-10 w-10 rounded-full flex items-center justify-center text-white">
