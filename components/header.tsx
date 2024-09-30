@@ -1,7 +1,6 @@
 import React from "react";
 import DisplayUserState from "./displayUserState";
 import Link from "next/link";
-import Image from "next/image";
 
 const Header: React.FC = () => {
   return (
