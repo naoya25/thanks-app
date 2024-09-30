@@ -59,7 +59,7 @@ const UserPage: React.FC = () => {
             {/* ユーザの手紙一覧 */}
             {letters.map((letter) => (
               <div className="flex justify-between items-center mt-6">
-                <Link href="/write">
+                <Link href={`/write?letter_id=${letter.id}`}>
                   <div className="flex space-x-4">
                     <div className="bg-blue-500 h-10 w-10 rounded-full flex items-center justify-center text-white">
                       <EmailIcon />
@@ -72,9 +72,23 @@ const UserPage: React.FC = () => {
                     </div>
                   </div>
                 </Link>
-                <Link href="/message1">
-                  <LinkIcon />
-                </Link>
+                <LinkIcon
+                  style={{ cursor: "pointer" }}
+                  onClick={() => {
+                    const url = `${window.location.origin}/message/${letter.id}`;
+                    navigator.clipboard.writeText(url).then(
+                      () => {
+                        alert("URLがクリップボードにコピーされました");
+                      },
+                      (err) => {
+                        console.error(
+                          "クリップボードへのコピーに失敗しました",
+                          err
+                        );
+                      }
+                    );
+                  }}
+                />
               </div>
             ))}
           </div>

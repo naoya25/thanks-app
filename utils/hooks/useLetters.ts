@@ -1,13 +1,6 @@
 import { useEffect, useState } from "react";
 import { createClient } from "../supabase/client";
-
-type Letter = {
-  id: string;
-  user_id: string;
-  title: string;
-  content: string;
-  created_at: string;
-};
+import { Letter } from "@/models/letter";
 
 export function useLetters() {
   const [letters, setLetters] = useState<Letter[]>([]);

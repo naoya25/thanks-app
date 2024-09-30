@@ -4,9 +4,33 @@ import "./style.css";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { useUser } from "@/utils/hooks/useUser";
-import { postLetter, PostLetterArgs } from "@/features/letters";
+import { getLetterById, postLetter, updateLetter } from "@/features/letters";
+import { Letter, PostLetterArgs, UpdateLetterArgs } from "@/models/letter";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const WritePage: React.FC = () => {
+  const searchParams = useSearchParams();
+  const letterId = searchParams.get("letter_id");
+  const [message, setMessage] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const { user, loading: userLoading, error } = useUser();
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchLetter = async () => {
+      if (letterId) {
+        const letter = (await getLetterById(letterId)) as Letter;
+        setTitle(letter.title);
+        setMessage(letter.content);
+        setPassword(letter.password);
+      }
+    };
+
+    fetchLetter();
+  }, [letterId]);
+
   useEffect(() => {
     function flexTextarea(el: HTMLElement) {
       const dummy = el.querySelector(".FlexTextarea__dummy") as HTMLElement;
@@ -22,12 +46,6 @@ const WritePage: React.FC = () => {
       .querySelectorAll(".FlexTextarea")
       .forEach((el) => flexTextarea(el as HTMLElement));
   }, []);
-
-  const [message, setMessage] = useState<string>("");
-  const [title, setTitle] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const { user, loading: userLoading, error } = useUser();
-  const [loading, setLoading] = useState(false);
 
   if (userLoading) {
     return <div>Loading...</div>;
@@ -51,13 +69,22 @@ const WritePage: React.FC = () => {
       setLoading(false);
       return;
     }
-    await postLetter({
-      user_id: user.id,
-      title: title,
-      content: message,
-      password: password,
-    } as PostLetterArgs);
+    if (letterId) {
+      await updateLetter({
+        id: letterId,
+        title: title,
+        content: message,
+      } as UpdateLetterArgs);
+    } else {
+      await postLetter({
+        user_id: user.id,
+        title: title,
+        content: message,
+        password: password,
+      } as PostLetterArgs);
+    }
     setLoading(false);
+    router.push("/user");
   };
 
   return (
@@ -77,22 +104,26 @@ const WritePage: React.FC = () => {
               id="title"
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
               onChange={(e) => setTitle(e.target.value)}
+              value={title}
             />
           </div>
-          <div className="mb-6">
-            <label
-              htmlFor="password"
-              className="block text-gray-700 text-sm font-bold mb-2"
-            >
-              合言葉
-            </label>
-            <input
-              type="text"
-              id="password"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
+          {!letterId && (
+            <div className="mb-6">
+              <label
+                htmlFor="password"
+                className="block text-gray-700 text-sm font-bold mb-2"
+              >
+                合言葉 ※後で編集できません
+              </label>
+              <input
+                type="password"
+                id="password"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
+              />
+            </div>
+          )}
           <div className="letter p-6">
             <div className="FlexTextarea">
               <div className="FlexTextarea__dummy" aria-hidden="true"></div>
@@ -100,6 +131,7 @@ const WritePage: React.FC = () => {
                 id="FlexTextarea"
                 className="FlexTextarea__textarea"
                 onChange={(e) => setMessage(e.target.value)}
+                value={message}
               />
             </div>
           </div>
@@ -108,7 +140,7 @@ const WritePage: React.FC = () => {
               type="submit"
               className="mt-12 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold py-3 px-6 rounded-full shadow-lg"
             >
-              {loading ? "送信中..." : "公開リンクを発行する"}
+              {loading ? "送信中..." : letterId ? "更新" : "公開リンクを発行"}
             </button>
           </div>
         </form>

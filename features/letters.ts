@@ -1,11 +1,20 @@
+import { Letter, PostLetterArgs, UpdateLetterArgs } from "@/models/letter";
 import { createClient } from "@/utils/supabase/client";
 import bcrypt from "bcryptjs";
 
-export type PostLetterArgs = {
-  user_id: string;
-  title: string;
-  content: string;
-  password: string;
+export const getLetterById = async (id: string) => {
+  const supabase = createClient();
+  const { data, error } = await supabase
+    .from("letters")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data as Letter;
 };
 
 export const postLetter = async (args: PostLetterArgs) => {
@@ -21,22 +30,13 @@ export const postLetter = async (args: PostLetterArgs) => {
   return data;
 };
 
-export type UpdateLetterArgs = {
-  id: string;
-  title: string;
-  content: string;
-  password: string;
-};
-
 export const updateLetter = async (args: UpdateLetterArgs) => {
   const supabase = createClient();
-  const hashedPassword = await bcrypt.hash(args.password, 10);
   const { data, error } = await supabase
     .from("letters")
     .update({
       title: args.title,
       content: args.content,
-      password: hashedPassword,
     })
     .eq("id", args.id);
 
