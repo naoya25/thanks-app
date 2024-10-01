@@ -1,8 +1,11 @@
+"use client";
 import Footer from "@/components/footer";
 import Header from "@/components/header";
+import { useUser } from "@/utils/hooks/useUser";
 import Link from "next/link";
 
 export default function Home() {
+  const { user } = useUser();
   return (
     <div>
       <Header />
@@ -20,7 +23,7 @@ export default function Home() {
             使い方
           </h2>
           <div className="max-w-5xl mx-auto grid grid-cols-1 gap-8">
-            <Link href="/login">
+            <Link href={user != null ? "/user" : "/login"}>
               <div className="bg-white shadow-lg rounded-lg p-6 text-center">
                 <h3 className="text-xl font-semibold text-blue-500 mb-2">
                   1. アカウント登録
