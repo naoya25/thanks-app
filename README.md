@@ -1,7 +1,5 @@
 # Thanks App
-
-Thanks Appは、ユーザーが手紙を読み書き・編集できるWebアプリケーションです。\
-シンプルで直感的なインターフェースを通じて、手紙の作成や管理が簡単に行えます。
+Thanks Appは、ユーザーが手紙を読み書き・編集できるWebアプリケーションです。
 
 https://thanks-app-two.vercel.app/
 
@@ -19,19 +17,24 @@ https://thanks-app-two.vercel.app/
 - **セキュリティ**: パスワードはbcryptでハッシュ化されて安全に保存
 
 ## 開発環境の準備
-ローカル環境で開発サーバーを起動するための手順は以下の通りです。
-1. リポジトリをクローンします。
-2. 依存パッケージをインストールします:
+ローカル環境で開発サーバーを起動するための手順
+1. リポジトリをクローン
+2. 依存パッケージをインストール
    ```bash
    npm install
    ```
-3. SupabaseおよびGoogle OAuth用の環境変数を設定します。
+3. Supabaseの環境変数を設定
+   `.env.local`ファイルを作成
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=***************
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=***************
+   ```
 4. 開発サーバーを起動します:
    ```bash
    vercel dev
    ```
 
 ## 技術スタック
-- **フロントエンド**: Next.js (TypeScriptを使用し、型安全性とスケーラビリティを実現)
-- **バックエンド**: Supabase（データベース管理と認証を担当）
-- **デプロイ**: Vercel（ホスティングと継続的デプロイ）
+- **フロントエンド**: Next.js
+- **バックエンド**: Supabase
+- **デプロイ**: Vercel
