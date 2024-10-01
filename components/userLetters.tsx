@@ -53,9 +53,9 @@ const UserLetters: React.FC = () => {
               </div>
             </div>
           </Link>
-          <div className="flex">
+          <div className="flex items-center">
             <LinkIcon
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", fontSize: "2rem" }}
               onClick={() => {
                 const url = `${window.location.origin}/message/${letter.id}`;
                 navigator.clipboard.writeText(url).then(
@@ -69,8 +69,11 @@ const UserLetters: React.FC = () => {
               }}
             />
             <DeleteIcon
-              style={{ cursor: "pointer", paddingLeft: "10px" }}
+              style={{ cursor: "pointer", marginLeft: "30px" }}
               onClick={async () => {
+                const confirmed =
+                  window.confirm("本当にこの手紙を削除しますか？");
+                if (!confirmed) return;
                 await deleteLetter(letter.id);
                 setLetters(letters.filter((l) => l.id !== letter.id));
               }}
