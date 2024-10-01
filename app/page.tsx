@@ -31,7 +31,7 @@ export default function Home() {
                 <p className="text-gray-600">Googleログイン</p>
               </div>
             </Link>
-            <Link href="/write">
+            <Link href={user != null ? "/write" : "/login"}>
               <div className="bg-white shadow-lg rounded-lg p-6 text-center">
                 <h3 className="text-xl font-semibold text-blue-500 mb-2">
                   2. 手紙の作成

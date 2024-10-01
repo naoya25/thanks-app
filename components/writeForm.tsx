@@ -1,18 +1,32 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { postLetter, updateLetter } from "@/features/letters";
+import { getLetterById, postLetter, updateLetter } from "@/features/letters";
 import { Letter, PostLetterArgs, UpdateLetterArgs } from "@/models/letter";
 import { useUser } from "@/utils/hooks/useUser";
 
-const WriteForm: React.FC<{ letter?: Letter }> = ({ letter }) => {
-  const [message, setMessage] = useState<string>(letter?.content || "");
-  const [title, setTitle] = useState<string>(letter?.title || "");
-  const [password, setPassword] = useState<string>(letter?.password || "");
+const WriteForm: React.FC<{ letterId?: string }> = ({ letterId }) => {
+  const [message, setMessage] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const { user } = useUser();
   const router = useRouter();
-  const displayContent = letter?.content;
+  const [displayContent, setDisplayContent] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchLetter = async () => {
+      if (letterId) {
+        const fetchedLetter = (await getLetterById(letterId)) as Letter;
+        setMessage(fetchedLetter.content);
+        setTitle(fetchedLetter.title);
+        setMessage(fetchedLetter.content);
+        setDisplayContent(fetchedLetter.content);
+      }
+    };
+
+    fetchLetter();
+  }, [letterId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,22 +35,28 @@ const WriteForm: React.FC<{ letter?: Letter }> = ({ letter }) => {
       return;
     }
     setLoading(true);
-    if (
-      title.trim() === "" ||
-      message.trim() === "" ||
-      password.trim() === ""
-    ) {
-      alert("タイトル、内容、合言葉は必須です");
-      setLoading(false);
-      return;
-    }
-    if (letter) {
+
+    if (letterId) {
+      if (title.trim() === "" || message.trim() === "") {
+        alert("タイトル、内容は必須です");
+        setLoading(false);
+        return;
+      }
       await updateLetter({
-        id: letter.id,
+        id: letterId,
         title: title,
         content: message,
       } as UpdateLetterArgs);
     } else {
+      if (
+        title.trim() === "" ||
+        message.trim() === "" ||
+        password.trim() === ""
+      ) {
+        alert("タイトル、内容、合言葉は必須です");
+        setLoading(false);
+        return;
+      }
       await postLetter({
         user_id: user.id,
         title: title,
@@ -65,7 +85,7 @@ const WriteForm: React.FC<{ letter?: Letter }> = ({ letter }) => {
           value={title}
         />
       </div>
-      {!letter && (
+      {!letterId && (
         <div className="mb-6">
           <label
             htmlFor="password"
@@ -92,9 +112,11 @@ const WriteForm: React.FC<{ letter?: Letter }> = ({ letter }) => {
             const htmlContent = e.currentTarget.innerHTML;
             if (htmlContent != null) {
               const updatedMessage = htmlContent
-                .replace(/<br>/g, "\n")
+                .replace(/<br\s*\/?>/g, "\n")
+                .replace(/<\/p>/g, "\n")
                 .replace(/<p>/g, "")
-                .replace(/<\/p>/g, "\n");
+                .replace(/<\/?div>/g, "\n")
+                .replace(/<\/?[^>]+(>|$)/g, "");
 
               setMessage(updatedMessage);
             }
@@ -110,7 +132,7 @@ const WriteForm: React.FC<{ letter?: Letter }> = ({ letter }) => {
           type="submit"
           className="mt-12 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold py-3 px-6 rounded-full shadow-lg"
         >
-          {loading ? "送信中..." : letter ? "更新" : "公開リンクを発行"}
+          {loading ? "送信中..." : letterId ? "更新" : "公開リンクを発行"}
         </button>
       </div>
     </form>

@@ -61,3 +61,14 @@ export const updateLetter = async (args: UpdateLetterArgs) => {
 
   return data;
 };
+
+export const deleteLetter = async (id: string) => {
+  const supabase = createClient();
+  const { data, error } = await supabase.from("letters").delete().eq("id", id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data;
+};

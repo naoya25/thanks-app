@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import bcrypt from "bcryptjs";
+import Link from "next/link";
 
 const MessagePage: React.FC = () => {
   const letterId = useParams().id as string;
@@ -12,6 +13,7 @@ const MessagePage: React.FC = () => {
   const [isFavorited, setIsFavorited] = useState(false);
   const [displayContent, setDisplayContent] = useState("");
   const [contentIndex, setContentIndex] = useState(0);
+  const [complete, setComplete] = useState(false);
 
   useEffect(() => {
     const fetchLetter = async () => {
@@ -20,17 +22,19 @@ const MessagePage: React.FC = () => {
         setLetter(fetchedLetter);
       }
     };
-
     fetchLetter();
   }, [letterId]);
 
   useEffect(() => {
     if (letter && contentIndex < letter.content.length) {
       const intervalId = setInterval(() => {
-        setDisplayContent(letter.content.substring(0, contentIndex));
+        setDisplayContent(letter.content.substring(0, contentIndex + 1));
         setContentIndex((prev) => prev + 1);
       }, 100);
       return () => clearInterval(intervalId);
+    }
+    if (letter && contentIndex >= letter.content.length) {
+      setComplete(true);
     }
   }, [letter, contentIndex]);
 
@@ -65,12 +69,24 @@ const MessagePage: React.FC = () => {
           <h1 className="text-4xl font-bold mt-4">Tap me!!</h1>
         </div>
       ) : (
-        <div className="letter p-6">
-          <div className="text">
-            {displayContent.split("\n").map((line, index) => (
-              <p key={index}>{line}</p>
-            ))}
+        <div>
+          <div className="letter p-6">
+            <div className="text">
+              {displayContent.split("\n").map((line, index) => (
+                <p key={index}>{line}</p>
+              ))}
+            </div>
           </div>
+          {complete && (
+            <div className="flex justify-center">
+              <Link
+                href="/"
+                className="mt-12 bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold py-3 px-6 rounded-full shadow-lg"
+              >
+                お返しの手紙を書く
+              </Link>
+            </div>
+          )}
         </div>
       )}
     </div>

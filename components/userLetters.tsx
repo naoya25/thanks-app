@@ -2,10 +2,11 @@
 import React, { useEffect, useState } from "react";
 import EmailIcon from "@mui/icons-material/Email";
 import LinkIcon from "@mui/icons-material/Link";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { dateFormat } from "@/utils/date";
 import Link from "next/link";
 import { Letter } from "@/models/letter";
-import { getLetters } from "@/features/letters";
+import { deleteLetter, getLetters } from "@/features/letters";
 import { useUser } from "@/utils/hooks/useUser";
 
 const UserLetters: React.FC = () => {
@@ -45,27 +46,36 @@ const UserLetters: React.FC = () => {
                 <EmailIcon />
               </div>
               <div>
-                <p className="font-medium">{letter.title}</p>
+                <p className="font-medium truncate w-32">{letter.title}</p>
                 <p className="text-sm text-gray-500">
                   {dateFormat(letter.created_at)}
                 </p>
               </div>
             </div>
           </Link>
-          <LinkIcon
-            style={{ cursor: "pointer" }}
-            onClick={() => {
-              const url = `${window.location.origin}/message/${letter.id}`;
-              navigator.clipboard.writeText(url).then(
-                () => {
-                  alert("URLがクリップボードにコピーされました");
-                },
-                () => {
-                  alert("クリップボードへのコピーに失敗しました");
-                }
-              );
-            }}
-          />
+          <div className="flex">
+            <LinkIcon
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                const url = `${window.location.origin}/message/${letter.id}`;
+                navigator.clipboard.writeText(url).then(
+                  () => {
+                    alert("URLがクリップボードにコピーされました");
+                  },
+                  () => {
+                    alert("クリップボードへのコピーに失敗しました");
+                  }
+                );
+              }}
+            />
+            <DeleteIcon
+              style={{ cursor: "pointer", paddingLeft: "10px" }}
+              onClick={async () => {
+                await deleteLetter(letter.id);
+                setLetters(letters.filter((l) => l.id !== letter.id));
+              }}
+            />
+          </div>
         </div>
       ))}
     </>

@@ -21,7 +21,7 @@ export default async function WritePage({
     <div>
       <Header />
       <div className="p-12">
-        <WriteForm letter={letter} />
+        <WriteForm letterId={letter?.id} />
       </div>
       <Footer />
     </div>
