@@ -17,6 +17,21 @@ export const getLetterById = async (id: string) => {
   return data as Letter;
 };
 
+export const getLetters = async (userId: string) => {
+  const supabase = createClient();
+  const { data: letters, error: lettersError } = await supabase
+    .from("letters")
+    .select("*")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false })
+    .returns<Letter[]>();
+
+  if (lettersError) {
+    throw new Error(lettersError.message);
+  }
+  return letters || [];
+};
+
 export const postLetter = async (args: PostLetterArgs) => {
   const supabase = createClient();
   const hashedPassword = await bcrypt.hash(args.password, 10);
